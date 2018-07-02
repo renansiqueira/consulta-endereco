@@ -1,0 +1,66 @@
+.page {
+  font-family: Arial,Sans-serif;
+  max-width: 450px; 
+}
+
+.page-search h1 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.page-search, .page-address {
+  padding: 15px;
+}
+
+.page-search {
+  background-color: #EEEEEE;
+  margin-bottom: 5px;
+  padding: 20px;
+  font-size: 12px;
+}
+
+.page-search label {
+  margin-right: 15px;
+}
+
+.page-search input {
+  margin-right: 5px;
+  color: #777777;
+}
+
+.page-search button {
+  color: #FFFFFF;
+  background-color: #3CA6E3;
+  border-radius: 3px;
+  padding: 3px 15px;
+  cursor:pointer;
+}
+
+.page-search button:hover {
+  background-color: #3698d1;
+}
+
+.page-address {
+  border: solid 2px #EEEEEE;
+  border-radius: 2px;
+  position: relative;
+}
+
+.page-address .clear {
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 5px;
+  font-size: 20px;
+  color: #BBBBBB;
+}
+
+.page-address .address-logradouro {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.page-address .address-bairro, .page-address .address-localidade, .page-address .address-cep {
+  font-size: 12px;
+}
