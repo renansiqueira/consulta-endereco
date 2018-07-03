@@ -45,6 +45,7 @@
   border: solid 2px #EEEEEE;
   border-radius: 2px;
   position: relative;
+  height: 350px;
 }
 
 .page-address .clear {
@@ -63,4 +64,100 @@
 
 .page-address .address-bairro, .page-address .address-localidade, .page-address .address-cep {
   font-size: 12px;
+}
+
+.page-address .map {
+  margin-top: 20px;
+}
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+
+.is-loading {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 100%;
+    position: relative;
+    top: 5px;
+}
+
+.masker {
+    background: #fff;
+    position: absolute;
+}
+
+
+.address-logradouro-placeholder-bottom, .address-bairro-placeholder-bottom, .address-localidade-placeholder-bottom {
+  left: 0;
+  right: 0;
+}
+
+.address-bairro-placeholder-bottom, .address-localidade-placeholder-bottom {
+  height: 7px;
+}
+
+.address-logradouro-placeholder-bottom {
+  height: 10px;
+}
+
+.address-cep-placeholder-bottom {
+  left: 0;
+  right: 0;
+  height: 27px;
+}
+
+.address-logradouro-placeholder-right {
+  top: 0;
+  left: 200px;
+  right: 0;
+  height: 17px;
+}
+
+.address-bairro-placeholder-right {
+  top: 20px;
+  left: 120px;
+  right: 0;
+  height: 15px;
+}
+
+.address-localidade-placeholder-right {
+  top: 35px;
+  left: 100px;
+  right: 0;
+  height: 17px;
+}
+
+.address-cep-placeholder-right {
+  top: 50px;
+  left: 80px;
+  right: 0;
+  height: 17px;
+}
+
+.address-logradouro-placeholder-bottom {
+  top: 12px;
+}
+
+.address-bairro-placeholder-bottom {
+  top: 32px;
+}
+
+.address-localidade-placeholder-bottom {
+  top: 50px;
+}
+
+.address-cep-placeholder-bottom {
+  top: 67px;
 }
