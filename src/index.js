@@ -10,8 +10,9 @@ class Page extends Component {
 		super(props);
 		this.state = {
 			isLoading: false,
-			cep: '84020-020',
-			address: {}
+			cep: '',
+			address: {},
+			message: ''
 		}
 	}
 
@@ -24,49 +25,67 @@ class Page extends Component {
 	clear(){
 		this.setState({
 			address: {},
-			cep: ''
+			cep: '',
+			message: ''
 		});
-	}
-
-	sleep(milliseconds) {
-	  var start = new Date().getTime();
-	  for (var i = 0; i < 1e7; i++) {
-	    if ((new Date().getTime() - start) > milliseconds){
-	      break;
-	    }
-	  }
 	}
 
 	getResult() {
-		this.setState({
-			isLoading: true
-		});
-
-		fetch('https://viacep.com.br/ws/'+this.state.cep+'/json')
-		.then(response => response.json())
-		.then(data => {
-			let address = data;
-
-			fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+this.state.cep+'&key=AIzaSyBjl812Fui3CRQ6fAUNRPgJL7zkAL0GXTU')
-			.then(geoResponse => geoResponse.json())
-			.then(geoData => {
-				address.lat = geoData.results[0].geometry.location.lat;
-				address.lng = geoData.results[0].geometry.location.lng;
-
-				this.sleep(2000); // REMOVE!!
-				
-				this.setState({
-					address: address,
-					isLoading: false
-				});
-
+		if(this.state.cep.length === 9){
+			this.setState({
+				isLoading: true,
+				message: ''
 			});
-		})
-		.catch(error => console.log('failed', error));
+
+			fetch('https://viacep.com.br/ws/'+this.state.cep+'/json')
+			.then(response  => {
+				if(response.status === 200){
+					return response;
+				}else{
+					this.setState({
+						address: {},
+						isLoading: false,
+						message: 'Localização não encontrada'
+					});
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				if(data !== undefined && !data.erro){
+					let address = data;
+
+					fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+this.state.cep+'&key=AIzaSyBjl812Fui3CRQ6fAUNRPgJL7zkAL0GXTU')
+					.then(geoResponse => geoResponse.json())
+					.then(geoData => {
+						address.lat = geoData.results[0].geometry.location.lat;
+						address.lng = geoData.results[0].geometry.location.lng;
+						
+						this.setState({
+							address: address,
+							isLoading: false
+						});
+
+					});
+				}else{
+					this.setState({
+						address: {},
+						isLoading: false,
+						message: 'Localização não encontrada.'
+					});
+				}
+			})
+			.catch(error => {
+				this.setState({
+					address: {},
+					isLoading: false,
+					message: 'Ocorreu um erro ao buscar esta localidade.'
+				});
+			});
+		}
 	}
 
 	render() {
-		const {isLoading, address} = this.state;
+		const {isLoading, address, message} = this.state;
 		return (
 			<div className="page">
 		        <div className="page-search">
@@ -75,9 +94,10 @@ class Page extends Component {
 					<InputMask name="cep" value={this.state.cep} onChange={e => this.handleChange(e)} mask="99999-999" />
 					<button onClick={() => this.getResult()}>Buscar</button>
 				</div>
+				<div className="page-address">
 	        	{Object.keys(address).length > 0 && !isLoading ?
-	        		<div className="page-address">
-	        			<span className="clear" onClick={() => this.clear()}>x</span>
+	        		<div>
+	        		    <span className="clear" onClick={() => this.clear()}>x</span>
 		        		<div className="address-logradouro">{address.logradouro}</div>
 		        		<div className="address-bairro">{address.bairro}</div>
 		        		<div className="address-localidade">{address.localidade} - {address.uf}</div>
@@ -91,21 +111,25 @@ class Page extends Component {
 	        	: null }
 
 	        	{isLoading ? 
-	        		<div className="page-address">
-	        			<div className="is-loading">
-		        			<div className="address-logradouro-placeholder-right masker"></div>
-			        		<div className="address-logradouro-placeholder-bottom masker"></div>
-			        		<div className="address-bairro-placeholder-right masker"></div>
-			        		<div className="address-bairro-placeholder-bottom masker"></div>
-			        		<div className="address-localidade-placeholder-right masker"></div>
-			        		<div className="address-localidade-placeholder-bottom masker"></div>
-			        		<div className="address-cep-placeholder-right masker"></div>
-			        		<div className="address-cep-placeholder-bottom masker"></div>
-			        		<div className="address-map-placeholder-right masker"></div>
-			        		<div className="address-map-placeholder-bottom masker"></div>			        		
-	        			</div>
-		    		</div>
+        			<div className="is-loading">
+	        			<div className="address-logradouro-placeholder-right masker"></div>
+		        		<div className="address-logradouro-placeholder-bottom masker"></div>
+		        		<div className="address-bairro-placeholder-right masker"></div>
+		        		<div className="address-bairro-placeholder-bottom masker"></div>
+		        		<div className="address-localidade-placeholder-right masker"></div>
+		        		<div className="address-localidade-placeholder-bottom masker"></div>
+		        		<div className="address-cep-placeholder-right masker"></div>
+		        		<div className="address-cep-placeholder-bottom masker"></div>
+		        		<div className="address-map-placeholder-right masker"></div>
+		        		<div className="address-map-placeholder-bottom masker"></div>			        		
+        			</div>
 	        	: null }
+
+	        	{message ?
+        			<div className="alert alert-warning">{message}</div>
+        		: null }
+
+        		</div>
 
 	      	</div>);
 	}
