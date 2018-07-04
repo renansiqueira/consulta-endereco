@@ -5,4 +5,4 @@
 
 ![Status][status]
 
-[status]: https://img.shields.io/badge/Status-Meddium-yellow.svg
+[status]: https://img.shields.io/badge/Status-Ok-greenlight.svg
